@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import redondo from '../models/redondo'
+import redondo from '../modules/redondo'
 
 export default createStore({
   state: {

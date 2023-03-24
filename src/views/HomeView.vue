@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="start">
+    <div class="head">
       <h1>Redondo</h1>
       <p class="grano">Tu granito de arena hace un mundo mejor</p>
     </div>
@@ -37,26 +37,26 @@
           <p class="subtitles">Prueba como quedarian tus donaciones</p>
           <div class="total">
             <p>Importe total:</p>
-            <input type="number" v-model="amount">
+            <input type="text" v-model="amount">
             <p> €</p>
-            <i class="fa-solid fa-piggy-bank" @click="showCalculate"></i>
+            <i class="fa-solid fa-piggy-bank" @click="updateAmount"></i>
           </div>
-          <div >
-            <div class="totalRedondo">
-              <p>Importe total con Redondo <i class="fa-solid fa-piggy-bank"></i> :</p>
-              <span>00 €</span>
-            </div>
-            <div class="donation">
-              <p>Donar 0.00 € a </p>
-              <select>
-                  <option value="">Causas humanitarias</option>
-                  <option value="">Salva un bosque</option>
-                  <option value="">Reciclaje sostenible</option>
-                  <option value="">Educación</option>
-                  <option value="">Investigaciones medioambientales</option>
-                </select> 
-            </div>
+        
+          <div class="totalRedondo">
+            <p>Importe total con Redondo <i class="fa-solid fa-piggy-bank"></i> :</p>
+            <span>{{ totalAmount }}.00 €</span>
           </div>
+          <div class="donation">
+            <p>Donar {{ difference }} € a </p>
+            <select>
+                <option value="">Causas humanitarias</option>
+                <option value="">Salva un bosque</option>
+                <option value="">Reciclaje sostenible</option>
+                <option value="">Educación</option>
+                <option value="">Investigaciones medioambientales</option>
+              </select> 
+          </div>
+        
           <button>Tramitar pedido</button>
         </div>
       </div>
@@ -73,19 +73,24 @@
 </template>
 
 <script>
-import {mapState, mapMutations} from 'vuex';
+import {mapActions, mapMutations, mapGetters} from 'vuex';
 
 export default {
-  name: 'HomeView',
-  computed: {
-    ...mapState('redondo', ['amount'])
+  data() {
+    return {
+      amount: ''
+    }
   },
- methods: {
-  ...mapMutations('redondo', ['calculate']),
-  showCalculate(){
-    this.calculate()
+  methods: {
+    ...mapActions('redondo', ['setAmount']),
+    ...mapMutations('redondo', ['updateAmount']),
+    updateAmount() {
+      this.setAmount(this.amount);
+    }
+  },
+  computed: {
+    ...mapGetters('redondo', ['totalAmount', 'difference'])
   }
- }
 }
 </script>
 
@@ -94,7 +99,7 @@ export default {
     .subtitles
       font-size: 25px
       padding: 2rem 0
-  .start
+  .head
     height: 92vh
     display: flex
     align-items: center
@@ -120,15 +125,13 @@ export default {
         color: #fafafa
       .example1
         p
-          // padding: 1rem 0
+          padding: 1rem 0
       .example1, .userExample
         background: #FAFAFA
         width: 40%
         margin: 1rem 0
         padding: 2rem
         border-radius: 2px
-      .userExample
-        margin-bottom: 2rem
         .total
           display: flex
           align-items: center
@@ -170,6 +173,7 @@ export default {
           border-radius: 10px
           cursor: pointer
       .userExample
+        margin-bottom: 2rem
         .total
           input
             margin: 0 15px
