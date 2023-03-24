@@ -34,6 +34,7 @@
       justify-content: center
       align-items: center
       width: 100%
+      min-height: 70vh
       .message
         margin: .6rem 0
         width: 30%
